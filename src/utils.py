@@ -36,7 +36,7 @@ def letter_rank(letter):
     return (ord(letter) - base_rank) % 9 + 1
 
 
-def digit_from_name(name):
+def digit_from_str(name):
     """Takes a name, converts it to the rank of its letters, then reduces by iteratively summing the obtained digits"""
     number_name = ""
 

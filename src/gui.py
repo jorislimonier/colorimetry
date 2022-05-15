@@ -73,7 +73,7 @@ class HomeGUI:
         self.firstname = self.firstname_field.get()
         self.lastname = self.lastname_field.get()
 
-        reduced_name = utils.digit_from_name(self.firstname + self.lastname)
+        reduced_name = utils.digit_from_str(self.firstname + self.lastname)
         self.digit_from_name_label["text"] = f"Your name digit is: {reduced_name}"
 
     def digit_from_birthdate(self):
