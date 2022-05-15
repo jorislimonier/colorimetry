@@ -2,6 +2,8 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
 app = Dash(__name__)
+server = app.server
+
 
 app.layout = html.Div(
     children=[
