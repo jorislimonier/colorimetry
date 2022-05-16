@@ -1,7 +1,11 @@
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
+import dash_daq as daq
 import numpy as np
 import utils
+
+
+BG_COLOR = "white"
 
 app = Dash(__name__)
 server = app.server
@@ -9,44 +13,15 @@ server = app.server
 
 app.layout = html.Div(
     children=[
-        dcc.Input(
-            id="dob",
-            type="number",
-            placeholder="Day of birth",
-            min=1,
-            max=31,
-        ),
-        dcc.Input(
-            id="mob",
-            type="number",
-            placeholder="Month of birth",
-            min=1,
-            max=12,
-        ),
-        dcc.Input(
-            id="yob",
-            type="number",
-            placeholder="Year of birth",
-        ),
-        dcc.Input(
-            id="firstname",
-            type="text",
-            placeholder="First name",
-        ),
-        dcc.Input(
-            id="lastname",
-            type="text",
-            placeholder="Last name",
-        ),
-        html.H4(
-            id="birthdate_digit",
-        ),
-        html.H4(
-            id="fullname_digit",
-        ),
-        html.H4(
-            id="letter_digits",
-        ),
+        dcc.Input(id="dob", type="number", placeholder="Day of birth", min=1, max=31),
+        dcc.Input(id="mob", type="number", placeholder="Month of birth", min=1, max=12),
+        dcc.Input(id="yob", type="number", placeholder="Year of birth"),
+        dcc.Input(id="firstname", type="text", placeholder="First name"),
+        dcc.Input(id="lastname", type="text", placeholder="Last name"),
+        html.H4(id="birthdate_digit"),
+        html.H4(id="fullname_digit"),
+        html.H4(id="letter_digits"),
+        daq.Indicator(id="birthdate_indicator", color=BG_COLOR, label="", value=False),
     ]
 )
 
@@ -90,6 +65,16 @@ def digit_from_letters(*vals):
         digits_fn = " ".join([str(utils.digit_from_str(letter)) for letter in fn])
         digits_ln = " ".join([str(utils.digit_from_str(letter)) for letter in ln])
         return f"Your letter digits are: {digits_fn} {digits_ln}"
+
+
+@app.callback(
+    Output("birthdate_indicator", "label"),
+    Output("birthdate_indicator", "color"),
+    Input("birthdate_digit", "children"),
+)
+def birthdate_color(digit):
+    print(digit)
+    return "", BG_COLOR
 
 
 if __name__ == "__main__":
