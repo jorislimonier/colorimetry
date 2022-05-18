@@ -21,3 +21,4 @@ class DataLoader:
 
 if __name__ == "__main__":
     dl = DataLoader()
+    # print(dl.data.loc[4])

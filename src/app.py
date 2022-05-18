@@ -1,69 +1,126 @@
-from dash import Dash, dcc, html
-from dash.dependencies import Input, Output
 import dash_daq as daq
 import numpy as np
-import utils
+from dash import Dash, dcc, html
+from dash.dependencies import Input, Output
 
+import data
+import utils
 
 BG_COLOR = "white"
 
 app = Dash(__name__)
 server = app.server
-
+app.title = "Color for life"
 
 app.layout = html.Div(
     children=[
-        dcc.Input(id="dob", type="number", placeholder="Day of birth", min=1, max=31),
-        dcc.Input(id="mob", type="number", placeholder="Month of birth", min=1, max=12),
-        dcc.Input(id="yob", type="number", placeholder="Year of birth"),
-        dcc.Input(id="firstname", type="text", placeholder="First name"),
-        dcc.Input(id="lastname", type="text", placeholder="Last name"),
+        html.H1("Color for life", style={"text-align": "center"}),
+        html.Div(
+            children=[
+                dcc.Input(
+                    id="dob_input",
+                    type="number",
+                    placeholder="Day of birth (DD)",
+                    min=1,
+                    max=31,
+                    style={"margin": 15},
+                ),
+                dcc.Input(
+                    id="mob_input",
+                    type="number",
+                    placeholder="Month of birth (MM)",
+                    min=1,
+                    max=12,
+                    style={"margin": 15},
+                ),
+                dcc.Input(
+                    id="yob_input",
+                    type="number",
+                    placeholder="Year of birth (YYYY)",
+                    style={"margin": 15},
+                ),
+                dcc.Input(
+                    id="firstname_input",
+                    type="text",
+                    placeholder="First name",
+                    style={"margin": 15},
+                ),
+                dcc.Input(
+                    id="lastname_input",
+                    type="text",
+                    placeholder="Last name",
+                    style={"margin": 15},
+                ),
+            ],
+            style={"display": "flex", "wrap": "nowrap", "justify-content": "center"},
+        ),
         html.H4(id="birthdate_digit"),
         html.H4(id="fullname_digit"),
         html.H4(id="letter_digits"),
-        daq.Indicator(id="birthdate_indicator", color=BG_COLOR, label="", value=False),
+        daq.Indicator(id="birthdate_indicator", color="red", label="", value=True),
+        dcc.Store(id="birthdate_digit_store"),
+        dcc.Store(id="fullname_digit_store"),
+        # dcc.Store(id="lastname_store"),
     ]
 )
 
 
+# Store
+## Birthdate digit
+@app.callback(
+    Output("birthdate_digit_store", "data"),
+    Input("dob_input", "value"),
+    Input("mob_input", "value"),
+    Input("yob_input", "value"),
+)
+def store_birthdate_digit(dob, mob, yob):
+    """Compute and store the color digit coming from birthdate"""
+    if np.all([isinstance(date, int) for date in [dob, mob, yob]]):
+        return utils.digit_from_number(f"{dob}{mob}{yob}")
+
+
+## Full name digit
+@app.callback(
+    Output("fullname_digit_store", "data"),
+    Input("firstname_input", "value"),
+    Input("lastname_input", "value"),
+)
+def store_fullname_digit(fn, ln):
+    """Compute and store the color digit coming from fullname"""
+    if isinstance(fn, str) and isinstance(ln, str):
+        return utils.digit_from_str(fn + ln)
+
+
 @app.callback(
     Output("birthdate_digit", "children"),
-    Input("dob", "value"),
-    Input("mob", "value"),
-    Input("yob", "value"),
+    Input("birthdate_digit_store", "data"),
 )
-def digit_from_birthdate(*vals):
+def digit_from_birthdate(birthdate_digit):
     """Takes a birth date and returns its color digit"""
-    dob, mob, yob = vals
-    if np.all([isinstance(date, int) for date in vals]):
-        digit = utils.digit_from_number(f"{dob}{mob}{yob}")
-        return f"Your birthdate digit is: {digit}"
+    if birthdate_digit is not None:
+        return f"Your birthdate digit is: {birthdate_digit}"
 
 
 @app.callback(
     Output("fullname_digit", "children"),
-    Input("firstname", "value"),
-    Input("lastname", "value"),
+    Input("fullname_digit_store", "data"),
 )
-def digit_from_fullname(*vals):
+def display_fullname_digit(fullname_digit):
     """Takes a full name and returns its color digit"""
-    fn, ln = vals
-    if np.all([isinstance(name, str) for name in vals]):
-        digit = utils.digit_from_str(f"{fn}{ln}")
-        return f"Your full name digit is: {digit}"
+    if fullname_digit is not None:
+        return f"Your full name digit is: {fullname_digit}"
 
 
 @app.callback(
     Output("letter_digits", "children"),
-    Input("firstname", "value"),
-    Input("lastname", "value"),
+    Input("firstname_input", "value"),
+    Input("lastname_input", "value"),
 )
-def digit_from_letters(*vals):
+def digit_from_letters(fn, ln):
     """Takes a full name and returns the color digit of each of its letters"""
-    fn, ln = vals
-    if np.all([isinstance(letter, str) for letter in vals]):
-        digits_fn = " ".join([str(utils.digit_from_str(letter)) for letter in fn])
-        digits_ln = " ".join([str(utils.digit_from_str(letter)) for letter in ln])
+    if np.all([isinstance(letter, str) for letter in [fn, ln]]):
+        digits_fn = [utils.digit_from_str(letter) for letter in fn]
+        digits_ln = [utils.digit_from_str(letter) for letter in ln]
         return f"Your letter digits are: {digits_fn} {digits_ln}"
 
 
@@ -73,7 +130,6 @@ def digit_from_letters(*vals):
     Input("birthdate_digit", "children"),
 )
 def birthdate_color(digit):
-    print(digit)
     return "", BG_COLOR
 
 
