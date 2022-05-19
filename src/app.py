@@ -56,11 +56,14 @@ app.layout = html.Div(
         ),
         html.H4(id="birthdate_digit"),
         html.H4(id="fullname_digit"),
+        html.H4(id="firstname_digits"),
+        html.H4(id="lastname_digits"),
         html.H4(id="letter_digits"),
         daq.Indicator(id="birthdate_indicator", color="red", label="", value=True),
         dcc.Store(id="birthdate_digit_store"),
         dcc.Store(id="fullname_digit_store"),
-        # dcc.Store(id="lastname_store"),
+        dcc.Store(id="firstname_digits_store"),
+        dcc.Store(id="lastname_digits_store"),
     ]
 )
 
@@ -75,53 +78,89 @@ app.layout = html.Div(
 )
 def store_birthdate_digit(dob, mob, yob):
     """Compute and store the color digit coming from birthdate"""
-    if np.all([isinstance(date, int) for date in [dob, mob, yob]]):
+    is_valid = [isinstance(date, int) for date in [dob, mob, yob]]
+
+    if np.all(is_valid):
         return utils.digit_from_number(f"{dob}{mob}{yob}")
 
+    return None
 
-## Full name digit
+
+## First name digit
 @app.callback(
-    Output("fullname_digit_store", "data"),
+    Output("firstname_digits_store", "data"),
     Input("firstname_input", "value"),
+)
+def store_firstname_digits(fn):
+    """Compute and store the color digit coming from fullname"""
+
+    if isinstance(fn, str) and np.all([letter.isalpha() for letter in fn]):
+        return [utils.digit_from_str(letter) for letter in fn]
+
+    return None
+
+
+## Last name digit
+## First name digit
+@app.callback(
+    Output("lastname_digits_store", "data"),
     Input("lastname_input", "value"),
 )
-def store_fullname_digit(fn, ln):
+def store_lastname_digits(ln):
     """Compute and store the color digit coming from fullname"""
-    if isinstance(fn, str) and isinstance(ln, str):
-        return utils.digit_from_str(fn + ln)
+
+    if isinstance(ln, str) and np.all([letter.isalpha() for letter in ln]):
+        return [utils.digit_from_str(letter) for letter in ln]
+
+    return None
 
 
+# Display
+## Birthdate digit
 @app.callback(
     Output("birthdate_digit", "children"),
     Input("birthdate_digit_store", "data"),
 )
-def digit_from_birthdate(birthdate_digit):
+def display_birthdate_digit(birthdate_digit):
     """Takes a birth date and returns its color digit"""
     if birthdate_digit is not None:
         return f"Your birthdate digit is: {birthdate_digit}"
+    return None
 
 
+## First name digit
 @app.callback(
-    Output("fullname_digit", "children"),
-    Input("fullname_digit_store", "data"),
+    Output("firstname_digits", "children"),
+    Input("firstname_digits_store", "data"),
 )
-def display_fullname_digit(fullname_digit):
+def display_firstname_digit(firstname_digit):
     """Takes a full name and returns its color digit"""
-    if fullname_digit is not None:
-        return f"Your full name digit is: {fullname_digit}"
+    if firstname_digit is not None:
+        return f"Your first name digits are: {firstname_digit}"
 
 
+## Last name digit
 @app.callback(
-    Output("letter_digits", "children"),
-    Input("firstname_input", "value"),
-    Input("lastname_input", "value"),
+    Output("lastname_digits", "children"),
+    Input("lastname_digits_store", "data"),
 )
-def digit_from_letters(fn, ln):
-    """Takes a full name and returns the color digit of each of its letters"""
-    if np.all([isinstance(letter, str) for letter in [fn, ln]]):
-        digits_fn = [utils.digit_from_str(letter) for letter in fn]
-        digits_ln = [utils.digit_from_str(letter) for letter in ln]
-        return f"Your letter digits are: {digits_fn} {digits_ln}"
+def display_lastname_digits(lastname_digits):
+    """Takes a full name and returns its color digit"""
+    if lastname_digits is not None:
+        return f"Your last name digits are: {lastname_digits}"
+
+
+# @app.callback(
+#     Output("letter_digits", "children"),
+#     Input("firstname_input", "value"),
+#     Input("lastname_input", "value"),
+# )
+# def digit_from_letters(fn, ln):
+#     """Takes a full name and returns the color digit of each of its letters"""
+#     if np.all([isinstance(letter, str) for letter in [fn, ln]]):
+#         digits_fn = [utils.digit_from_str(letter) for letter in fn]
+#         digits_ln = [utils.digit_from_str(letter) for letter in ln]
+#         return f"Your letter digits are: {digits_fn} {digits_ln}"
 
 
 @app.callback(
