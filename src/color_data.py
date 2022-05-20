@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class DataLoader:
+class ColorData:
     COLORS_DICT = {
         "rouge": "red",
         "orange": "orange",
@@ -14,11 +14,24 @@ class DataLoader:
         "gold": "gold",
     }
 
-    def __init__(self) -> None:
+    def __init__(self, color_digit) -> None:
         self.data = pd.read_excel("data/colors_meaning.xlsx", index_col=0)
         self.data["color"] = self.data["color"].replace(self.COLORS_DICT)
+        self.color_digit = color_digit
+
+    @property
+    def title(self):
+        return self.data.loc[self.color_digit, "title"]
+
+    @property
+    def color(self):
+        return self.data.loc[self.color_digit, "color"]
+
+    @property
+    def keywords(self):
+        return self.data.loc[self.color_digit, "keywords"]
 
 
 if __name__ == "__main__":
-    dl = DataLoader()
-    # print(dl.data.loc[4])
+    dl = ColorData(4)
+    print(dl.keywords)

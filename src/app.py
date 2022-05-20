@@ -3,7 +3,7 @@ import numpy as np
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
-import data
+from color_data import ColorData
 import utils
 
 BG_COLOR = "white"
@@ -166,10 +166,15 @@ def display_lastname_digits(lastname_digits):
 @app.callback(
     Output("birthdate_indicator", "label"),
     Output("birthdate_indicator", "color"),
-    Input("birthdate_digit", "children"),
+    Input("birthdate_digit_store", "data"),
 )
 def birthdate_color(digit):
-    return "", BG_COLOR
+    print(digit)
+    cd = ColorData(digit)
+    if digit is not None:
+        return cd.title, cd.color
+    else:
+        return "", BG_COLOR
 
 
 if __name__ == "__main__":
