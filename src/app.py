@@ -150,19 +150,6 @@ def display_lastname_digits(lastname_digits):
         return f"Your last name digits are: {lastname_digits}"
 
 
-# @app.callback(
-#     Output("letter_digits", "children"),
-#     Input("firstname_input", "value"),
-#     Input("lastname_input", "value"),
-# )
-# def digit_from_letters(fn, ln):
-#     """Takes a full name and returns the color digit of each of its letters"""
-#     if np.all([isinstance(letter, str) for letter in [fn, ln]]):
-#         digits_fn = [utils.digit_from_str(letter) for letter in fn]
-#         digits_ln = [utils.digit_from_str(letter) for letter in ln]
-#         return f"Your letter digits are: {digits_fn} {digits_ln}"
-
-
 @app.callback(
     Output("birthdate_indicator", "label"),
     Output("birthdate_indicator", "color"),
