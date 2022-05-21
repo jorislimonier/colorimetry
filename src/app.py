@@ -156,7 +156,7 @@ def display_lastname_digits(lastname_digits):
     Input("birthdate_digit_store", "data"),
 )
 def birthdate_color(digit):
-    print(digit)
+    """Display birthdate color"""
     cd = ColorData(digit)
     if digit is not None:
         return cd.title, cd.color
@@ -166,4 +166,3 @@ def birthdate_color(digit):
 
 if __name__ == "__main__":
     app.run_server(debug=True, dev_tools_hot_reload=True)
- 

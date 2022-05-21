@@ -4,3 +4,7 @@ This repository contains scripts to compute your the color that corresponds to y
 - Date of birth
 - First name
 - Last name
+
+The information obtained from colors are:
+- Title
+- Keywords
