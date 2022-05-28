@@ -16,7 +16,7 @@ class ColorData:
 
     def __init__(self, color_digit) -> None:
         self.data = pd.read_excel("data/colors_meaning.xlsx", index_col=0)
-        self.data["color"] = self.data["color"].replace(self.COLORS_DICT)
+        self.data["color_code"] = self.data["color"].replace(self.COLORS_DICT)
         self.color_digit = color_digit
 
     @property
@@ -24,8 +24,12 @@ class ColorData:
         return self.data.loc[self.color_digit, "title"]
 
     @property
+    def color_code(self):
+        return self.data.loc[self.color_digit, "color_code"]
+
+    @property
     def color(self):
-        return self.data.loc[self.color_digit, "color"]
+        return self.data.loc[self.color_digit, "color_code"]
 
     @property
     def keywords(self):
