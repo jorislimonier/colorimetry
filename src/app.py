@@ -10,7 +10,7 @@ import input_fields
 from callbacks import BG_COLOR
 
 
-title = html.H1("Color for life", style={"text-align": "center"})
+title = html.H1("The Colour Path", style={"text-align": "center"})
 birthdate_color_display = html.Div(
     id="birthdate_indicator",
     style={
@@ -32,7 +32,7 @@ birthdate_keywords_display = html.H4(
 
 app = Dash(__name__)
 server = app.server
-app.title = "Color for life"
+app.title = "The Colour Path"
 app.layout = html.Div(
     children=(
         [title]
