@@ -8,6 +8,7 @@ import utils
 import store
 import input_fields
 from callbacks import BG_COLOR
+import callbacks
 
  
 title = html.H1("The Colour Path", style={"text-align": "center"})
