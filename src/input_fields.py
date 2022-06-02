@@ -21,7 +21,7 @@ input_fields = html.Div(
         dcc.Input(
             id="yob_input",
             type="number",
-            placeholder="Year of birth (YYYY)",
+            placeholder="Year oof birth (YYYY)",
             style={"margin": 15},
         ),
         dcc.Input(

@@ -1,23 +1,15 @@
+# _______callbacks___________
 import dash_daq as daq
 import numpy as np
-from dash import Dash, dcc, html
-from dash.dependencies import Input, Output
+from dash import Dash, callback, dcc, html
+from dash.dependencies import Input, Output, State
 
 import input_fields
 import store
 import utils
-from callbacks import *
+# from callbacks import *
 # from callbacks import BG_COLOR
 from color_data import ColorData
-
-# _______callbacks___________
-import dash_daq as daq
-import numpy as np
-from dash import Dash, dcc, html, callback
-from dash.dependencies import Input, Output, State
-
-from color_data import ColorData
-import utils
 
 BG_COLOR = "white"
 
@@ -126,6 +118,6 @@ app.layout = html.Div(
 
 if __name__ == "__main__":
     app.run_server(
-        debug=True,
+        debug=False,
         dev_tools_hot_reload=True,
     )
