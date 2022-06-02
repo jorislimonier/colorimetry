@@ -3,14 +3,14 @@ import numpy as np
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
-from color_data import ColorData
-import utils
-import store
 import input_fields
-from callbacks import BG_COLOR
-import callbacks
+import store
+import utils
+from callbacks import *
+# from callbacks import BG_COLOR
+from color_data import ColorData
 
- 
+# print(BG_COLOR)
 title = html.H1("The Colour Path", style={"text-align": "center"})
 birthdate_color_display = html.Div(
     id="birthdate_indicator",
@@ -51,4 +51,3 @@ if __name__ == "__main__":
         debug=True,
         dev_tools_hot_reload=True,
     )
-
