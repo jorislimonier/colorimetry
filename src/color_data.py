@@ -13,7 +13,7 @@ class ColorData:
         "rose": "#ff748c",
         "gold": "gold",
     }
-
+ 
     def __init__(self, color_digit) -> None:
         self.data = pd.read_excel("data/colors_meaning.xlsx", index_col=0)
         self.data["color_code"] = self.data["color"].replace(self.COLORS_DICT)

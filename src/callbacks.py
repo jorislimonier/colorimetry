@@ -8,7 +8,7 @@ import utils
 
 BG_COLOR = "white"
 
-
+ 
 # Store
 ## Birthdate digit
 @callback(

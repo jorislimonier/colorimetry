@@ -9,7 +9,7 @@ import store
 import input_fields
 from callbacks import BG_COLOR
 
-
+ 
 title = html.H1("The Colour Path", style={"text-align": "center"})
 birthdate_color_display = html.Div(
     id="birthdate_indicator",

@@ -2,7 +2,7 @@ import numpy as np
 import unidecode
 
 
-def digit_from_number(date):
+def digit_from_number(date): 
     """Convert a number to the iterative sum of its digits"""
     # convert `date` to a string if it isn't already one
     if not isinstance(date, str):

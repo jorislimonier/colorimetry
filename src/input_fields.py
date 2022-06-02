@@ -17,7 +17,7 @@ input_fields = html.Div(
             min=1,
             max=12,
             style={"margin": 15},
-        ),
+        ), 
         dcc.Input(
             id="yob_input",
             type="number",
