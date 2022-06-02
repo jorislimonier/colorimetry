@@ -4,12 +4,12 @@ import numpy as np
 from dash import Dash, callback, dcc, html
 from dash.dependencies import Input, Output, State
 
-import input_fields
-import store
-import utils
+from src import input_fields
+from src import store
+from src import utils
 # from callbacks import *
 # from callbacks import BG_COLOR
-from color_data import ColorData
+from src.color_data import ColorData
 
 BG_COLOR = "white"
 
@@ -24,9 +24,11 @@ BG_COLOR = "white"
 )
 def store_birthdate_digit(dob, mob, yob):
     """Compute and store the color digit coming from birthdate"""
+    print(dob, mob, yob)
     is_valid = [isinstance(date, int) for date in [dob, mob, yob]]
 
     if np.all(is_valid):
+        print("all valid")
         return utils.digit_from_number(f"{dob}{mob}{yob}")
 
     return None
@@ -118,6 +120,6 @@ app.layout = html.Div(
 
 if __name__ == "__main__":
     app.run_server(
-        debug=False,
+        debug=True,
         dev_tools_hot_reload=True,
     )
