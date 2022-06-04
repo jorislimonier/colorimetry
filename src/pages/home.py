@@ -147,3 +147,4 @@ def birthdate_color(dob, mob, yob, indicator_style):
     else:
         new_indicator_style["background-color"] = BG_COLOR
         return "", new_indicator_style, ""
+ 
