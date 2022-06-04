@@ -13,7 +13,7 @@ app.layout = html.Div(
                 dcc.Link("Home", href="/"),
             ]
         ),
-        html.Div(id="page-content", children=[]),
+        html.Div(id="page-content", children=home.layout),
     ]
 )
 
@@ -24,7 +24,6 @@ app.layout = html.Div(
 )
 def display_page(pathname):
     if pathname == "/":
-        print(home.layout)
         return home.layout
     else:
         return "404 Page Error! Please choose a link"
