@@ -1,18 +1,34 @@
+import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 
 from app import app, server
-from src.pages import home
+from src.color_data import ColorData
+from src.pages.home import home
 
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.DropdownMenu(
+            children=[dbc.DropdownMenuItem("Select a color", header=True)]
+            + [
+                dbc.DropdownMenuItem(color.capitalize(), href=color)
+                for color in ColorData.data["color_en"]
+            ],
+            nav=True,
+            in_navbar=True,
+            label="Colors",
+        ),
+    ],
+    brand="The Colour Path",
+    brand_href="/",
+    color="primary",
+    dark=True,
+)
 app.title = "The Colour Path"
 app.layout = html.Div(
     children=[
         dcc.Location(id="url", refresh=False),
-        html.Div(
-            children=[
-                dcc.Link("Home", href="/"),
-            ]
-        ),
+        navbar,
         html.Div(id="page-content", children=home.layout),
     ]
 )

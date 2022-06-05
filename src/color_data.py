@@ -13,10 +13,23 @@ class ColorData:
         "rose": "#ff748c",
         "gold": "gold",
     }
- 
+    COLORS_FR_EN = {
+        "rouge": "red",
+        "orange": "orange",
+        "jaune": "yellow",
+        "vert": "green",
+        "bleu": "blue",
+        "indigo": "indigo",
+        "violet": "purple",
+        "rose": "pink",
+        "gold": "gold",
+    }
+
+    data = pd.read_excel("data/colors_meaning.xlsx", index_col=0)
+    data["color_en"] = data["color"].replace(COLORS_FR_EN)
+    data["color_code"] = data["color"].replace(COLORS_DICT)
+
     def __init__(self, color_digit) -> None:
-        self.data = pd.read_excel("data/colors_meaning.xlsx", index_col=0)
-        self.data["color_code"] = self.data["color"].replace(self.COLORS_DICT)
         self.color_digit = color_digit
 
     @property
@@ -29,7 +42,7 @@ class ColorData:
 
     @property
     def color(self):
-        return self.data.loc[self.color_digit, "color_code"]
+        return self.data.loc[self.color_digit, "color"]
 
     @property
     def keywords(self):
