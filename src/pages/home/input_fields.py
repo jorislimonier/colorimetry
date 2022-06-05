@@ -4,7 +4,7 @@ input_fields = html.Div(
     children=[
         dcc.Input(
             id="dob_input",
-            # type="number",
+            type="number",
             placeholder="Day of birth (DD)",
             min=1,
             max=31,
@@ -29,14 +29,14 @@ input_fields = html.Div(
             type="text",
             placeholder="First name",
             style={"margin": 15},
-            # value="Joris",
+            value="Joris",
         ),
         dcc.Input(
             id="lastname_input",
             type="text",
             placeholder="Last name",
             style={"margin": 15},
-            # value="LIMONIER",
+            value="LIMONIER",
         ),
     ],
     style={

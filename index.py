@@ -5,13 +5,14 @@ from dash.dependencies import Input, Output, State
 from app import app, server
 from src.color_data import ColorData
 from src.pages.home import home
+from src.pages.colors import colors
 
 navbar = dbc.NavbarSimple(
     children=[
         dbc.DropdownMenu(
             children=[dbc.DropdownMenuItem("Select a color", header=True)]
             + [
-                dbc.DropdownMenuItem(color.capitalize(), href=color)
+                dbc.DropdownMenuItem(color.capitalize(), href=f"/color/{color}")
                 for color in ColorData.data["color_en"]
             ],
             nav=True,
@@ -38,10 +39,14 @@ app.layout = html.Div(
     Output("page-content", "children"),
     Input("url", "pathname"),
 )
-def display_page(pathname):
+def display_page(pathname: str):
     if pathname == "/":
         return home.layout
+    elif pathname.startswith("/color/"):
+        color = pathname.replace("/color/", "")
+        return colors.color_layout[color]
     else:
+        print(pathname, ColorData.data["color_en"].values)
         return "404 Page Error! Please choose a link"
 
 
