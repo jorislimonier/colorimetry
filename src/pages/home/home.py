@@ -1,10 +1,6 @@
-from typing import Optional
-import dash_daq as daq
-import numpy as np
 import dash
-from dash import callback, dcc, html
+from dash import callback, html
 from dash.dependencies import Input, Output, State
-
 from src import utils
 from src.color_data import ColorData
 from src.pages.home.input_fields import input_fields
@@ -109,10 +105,17 @@ def color_glyph(fn, ln):
         )
 
         # make div with uppercase letter
-        letter_div = html.H3(children=letter.upper(), style={"text-align": "center"})
+        letter_div = html.H3(
+            children=letter.upper(),
+            style={"text-align": "center"},
+        )
 
         # concatenate color and letter divs
-        div = html.Div(children=[color_div, letter_div])
+        div = html.Div(
+            children=[color_div, letter_div],
+            style={"margin": "1px"},
+        )
+        
         fullname_color_div.append(div)
 
     return fullname_color_div
