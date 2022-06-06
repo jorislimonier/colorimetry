@@ -54,7 +54,10 @@ color_frequency_container = html.Div(
 
 second_row_container = html.Div(
     children=[color_glyph_container, color_frequency_container],
-    style={"margin-top": "100px", "display": "flex"},
+    style={
+        # "margin-top": "100px",
+        "display": "flex",
+    },
 )
 
 layout = [
@@ -63,6 +66,7 @@ layout = [
     birthdate_color_display,
     birthdate_title_display,
     birthdate_keywords_display,
+    html.Br(),
     second_row_container,
 ]
 
@@ -107,11 +111,11 @@ def color_glyph(fn, ln):
 
     for letter in f"{fn} {ln}":
         style = {"width": "30px", "height": "30px"}
-        
-        if letter == " ": # add BG_COLOR div between names
+
+        if letter == " ":  # add BG_COLOR div between names
             color = BG_COLOR
 
-        else: # get color for the given letter
+        else:  # get color for the given letter
             digit = utils.digit_from_str(letter)
             color = ColorData(digit).color_code
             style[
@@ -119,7 +123,7 @@ def color_glyph(fn, ln):
             ] = "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)"
 
         style["background-color"] = color
-        
+
         # make div with appropriate color
         color_display = html.Div(style=style)
 
