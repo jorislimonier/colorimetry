@@ -9,6 +9,7 @@ input_fields = html.Div(
             min=1,
             max=31,
             style={"margin": 15},
+            value=12,
         ),
         dcc.Input(
             id="mob_input",
@@ -17,12 +18,14 @@ input_fields = html.Div(
             min=1,
             max=12,
             style={"margin": 15},
+            value=2,
         ),
         dcc.Input(
             id="yob_input",
             type="number",
             placeholder="Year of birth (YYYY)",
             style={"margin": 15},
+            value=1998,
         ),
         dcc.Input(
             id="firstname_input",

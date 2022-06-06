@@ -59,8 +59,7 @@ def display_page(pathname: str):
         return colors.color_layout[color]
 
     # page not found
-    else:
-        return "404 Page Error! Please choose a link"
+    return "404 Page Error! Please enter a valid URL."
 
 
 if __name__ == "__main__":

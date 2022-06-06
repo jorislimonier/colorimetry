@@ -1,6 +1,7 @@
 import dash
 from dash import callback, html
 from dash.dependencies import Input, Output, State
+import pandas as pd
 from src import utils
 from src.color_data import ColorData
 from src.pages.home.input_fields import input_fields
@@ -32,11 +33,28 @@ birthdate_keywords_display = html.H4(
 # Second row
 color_glyph_container = html.Div(
     id="color_glyph_container",
-    style={"width": "50%", "height": "100px", "display": "flex"},
+    style={
+        "width": "50%",
+        "height": "100px",
+        "display": "flex",
+        "justify-content": "center",
+    },
+)
+
+color_frequency_container = html.Div(
+    id="color_frequency_container",
+    style={
+        "width": "50%",
+        # "height": "100px",
+        "margin": "auto",
+        "justify-content": "center",
+        # "background-color": "red",
+    },
 )
 
 second_row_container = html.Div(
-    children=[color_glyph_container], style={"height": "100px"}
+    children=[color_glyph_container, color_frequency_container],
+    style={"height": "100px", "display": "flex"},
 )
 
 layout = [
@@ -86,36 +104,99 @@ def color_glyph(fn, ln):
         return dash.no_update
 
     fullname_color_div = []
+
     for letter in f"{fn} {ln}":
-        if letter == " ":
-            # add BG_COLOR div between first and last names
+        style = {"width": "30px", "height": "30px"}
+        
+        if letter == " ": # add BG_COLOR div between names
             color = BG_COLOR
-        else:
-            # get color for the given letter
+
+        else: # get color for the given letter
             digit = utils.digit_from_str(letter)
             color = ColorData(digit).color_code
+            style[
+                "box-shadow"
+            ] = "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)"
 
+        style["background-color"] = color
+        
         # make div with appropriate color
-        color_div = html.Div(
-            style={
-                "background-color": color,
-                "width": "30px",
-                "height": "30px",
-            }
-        )
+        color_display = html.Div(style=style)
 
         # make div with uppercase letter
-        letter_div = html.H3(
+        letter_display = html.H3(
             children=letter.upper(),
             style={"text-align": "center"},
         )
 
         # concatenate color and letter divs
         div = html.Div(
-            children=[color_div, letter_div],
-            style={"margin": "1px"},
+            children=[color_display, letter_display],
+            style={"margin-left": "10px"},
         )
-        
+
         fullname_color_div.append(div)
 
     return fullname_color_div
+
+
+@callback(
+    Output("color_frequency_container", "children"),
+    Input("firstname_input", "value"),
+    Input("lastname_input", "value"),
+)
+def color_frequency(fn, ln):
+    """Return the color glyph from first and last names"""
+    if (fn == "") or (ln == "") or (fn is None) or (ln is None):
+        return dash.no_update
+
+    color_frequency_div = []
+
+    # initialize color count df
+    color_count = ColorData.data[["color", "color_code"]].copy()
+    color_count["count"] = 0
+    for letter in f"{fn}{ln}":
+        if letter == " ":
+            # add BG_COLOR div between first and last names
+            color = BG_COLOR
+        else:
+            # get color for the given letter
+            digit = utils.digit_from_str(letter)
+            color_count.loc[digit, "count"] += 1
+
+    color_count = color_count.sort_values("count", ascending=False)
+
+    for _, row in color_count.iterrows():
+        # make div with appropriate color
+        color_list = html.Div(
+            style={
+                "background-color": row["color_code"],
+                "width": "30px",
+                "height": "30px",
+                "margin-right": "50px",
+                "margin-bottom": "15px",
+                "box-shadow": "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)",
+            }
+        )
+
+        color_frequency = [
+            html.Div(
+                style={
+                    "background-color": row["color_code"],
+                    "width": "30px",
+                    "height": "30px",
+                    "margin-left": "10px",
+                    "box-shadow": "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)",
+                }
+            )
+            for _ in range(row["count"])
+        ]
+
+        div = html.Div(
+            children=[color_list, *color_frequency],
+            style={"display": "flex"},
+        )
+
+        color_frequency_div.append(div)
+
+    return color_frequency_div
