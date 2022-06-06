@@ -25,4 +25,5 @@ for color in COLOR_LIST:
             html.Div(children=[archetype1_title, archetype1_descr]),
             html.Div(children=[archetype2_title, archetype2_descr]),
         ],
+        style={"margin":" 20px"},
     )

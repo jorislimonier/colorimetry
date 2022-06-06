@@ -54,7 +54,7 @@ color_frequency_container = html.Div(
 
 second_row_container = html.Div(
     children=[color_glyph_container, color_frequency_container],
-    style={"height": "100px", "display": "flex"},
+    style={"margin-top": "100px", "display": "flex"},
 )
 
 layout = [
