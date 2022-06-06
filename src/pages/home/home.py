@@ -1,7 +1,8 @@
 import dash
+import dash_bootstrap_components as dbc
+import pandas as pd
 from dash import callback, html
 from dash.dependencies import Input, Output, State
-import pandas as pd
 from src import utils
 from src.color_data import ColorData
 from src.pages.home.input_fields import input_fields
@@ -27,45 +28,47 @@ birthdate_title_display = html.H3(
 )
 
 birthdate_keywords_display = html.H4(
-    children=[], id="birthdate_keywords", style={"text-align": "center"}
+    children=[],
+    id="birthdate_keywords",
+    style={"text-align": "center"},
+)
+
+birthdate_results = dbc.Row(
+    dbc.Col(
+        children=[
+            birthdate_color_display,
+            birthdate_title_display,
+            birthdate_keywords_display,
+        ],
+        width={"size": 10, "offset": 1},
+    )
 )
 
 # Second row
-color_glyph_container = html.Div(
+color_glyph_container = dbc.Col(
     id="color_glyph_container",
     style={
-        "width": "50%",
-        "height": "100px",
         "display": "flex",
         "justify-content": "center",
     },
 )
 
-color_frequency_container = html.Div(
+color_frequency_container = dbc.Col(
     id="color_frequency_container",
-    style={
-        "width": "50%",
-        # "height": "100px",
-        "margin": "auto",
-        "justify-content": "center",
-        # "background-color": "red",
-    },
+    style={"justify-content": "center", "align-items": "center", "margin": "auto"},
 )
 
 second_row_container = html.Div(
-    children=[color_glyph_container, color_frequency_container],
-    style={
-        # "margin-top": "100px",
-        "display": "flex",
-    },
+    dbc.Row(
+        children=[color_glyph_container, color_frequency_container], justify="center"
+    )
 )
 
 layout = [
     # title,
     input_fields,
-    birthdate_color_display,
-    birthdate_title_display,
-    birthdate_keywords_display,
+    html.Br(),
+    birthdate_results,
     html.Br(),
     second_row_container,
 ]
