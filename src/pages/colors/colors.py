@@ -1,3 +1,4 @@
+import dash_bootstrap_components as dbc
 from dash import html
 from src.color_data import ColorData
 
@@ -14,16 +15,30 @@ for color in COLOR_LIST:
         style={"text-align": "center"},
     )
 
-    archetype1_title = html.H3(color_data["archetype1_title"].capitalize())
-    archetype1_descr = html.H6(color_data["archetype1_description"])
-    archetype2_title = html.H3(color_data["archetype2_title"].capitalize())
-    archetype2_descr = html.H6(color_data["archetype2_description"])
+    title_width = {"sm": 5, "md": 5, "lg": 4}
+    descr_width = {"sm": 9, "md": 11, "lg": 8}
 
+    rows = []
+    for row_idx in range(1, 3):
+        archetype_title = dbc.Col(
+            html.H3(color_data[f"archetype{row_idx}_title"].capitalize()),
+            sm=title_width["sm"],
+            md=title_width["md"],
+            lg=title_width["lg"],
+        )
+
+        archetype_descr = dbc.Col(
+            html.H6(color_data[f"archetype{row_idx}_description"]),
+            sm=descr_width["sm"],
+            md=descr_width["md"],
+            lg=descr_width["lg"],
+        )
+
+        rows.append(dbc.Row(children=[archetype_title, archetype_descr]))
+    
+    rows.insert(1, html.Br())
+    
     color_layout[color] = html.Div(
-        children=[
-            title,
-            html.Div(children=[archetype1_title, archetype1_descr]),
-            html.Div(children=[archetype2_title, archetype2_descr]),
-        ],
-        style={"margin":" 20px"},
+        children=[title, *rows],
+        style={"margin": " 20px"},
     )
