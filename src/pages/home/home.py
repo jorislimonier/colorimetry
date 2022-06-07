@@ -107,7 +107,7 @@ def birthdate_color(dob, mob, yob, indicator_style):
 )
 def color_glyph(fn, ln):
     """Return the color glyph from first and last names"""
-    if (fn == "") or (ln == "") or (fn is None) or (ln is None):
+    if (fn is None) or (ln is None):
         return dash.no_update
 
     fullname_color_div = []

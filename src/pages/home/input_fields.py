@@ -6,36 +6,41 @@ dob_input = dbc.Select(
     placeholder="Day of birth (DD)",
     options=[{"label": k, "value": k} for k in range(1, 32)],
     persistence=True,
-    persistence_type="memory",
-    value=12,
+    persistence_type="session",
+    # value=12,
 )
 mob_input = dbc.Select(
     id="mob_input",
     placeholder="Month of birth (MM)",
     options=[{"label": k, "value": k} for k in range(1, 13)],
     persistence=True,
-    persistence_type="memory",
-    value=2,
+    persistence_type="session",
+    # value=2,
 )
 yob_input = dbc.Select(
     id="yob_input",
     placeholder="Year of birth (YYYY)",
     options=[{"label": k, "value": k} for k in range(1925, 2026)],
     persistence=True,
-    persistence_type="memory",
-    value=1998,
+    persistence_type="session",
+    # value=1998,
 )
 firstname_input = dbc.Input(
     id="firstname_input",
     type="text",
     placeholder="First name",
-    value="Joris",
+    persistence=True,
+    persistence_type="session",
+    inputmode="latin-name"
+    # value="Joris",
 )
 lastname_input = dbc.Input(
     id="lastname_input",
     type="text",
     placeholder="Last name",
-    value="LIMONIER",
+    persistence=True,
+    persistence_type="session",
+    # value="LIMONIER",
 )
 
 input_fields = html.Div(
