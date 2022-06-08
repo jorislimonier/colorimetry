@@ -51,16 +51,21 @@ color_glyph_container = dbc.Col(
         "display": "flex",
         "justify-content": "center",
     },
+    
 )
 
 color_frequency_container = dbc.Col(
     id="color_frequency_container",
-    style={"justify-content": "center", "align-items": "center", "margin": "auto"},
+    style={
+        "justify-content": "center",
+        "margin": "auto",
+    },
 )
 
 second_row_container = html.Div(
     dbc.Row(
-        children=[color_glyph_container, color_frequency_container], justify="center"
+        children=[color_glyph_container, color_frequency_container],
+        style={"justify": "center"},
     )
 )
 
@@ -113,7 +118,11 @@ def color_glyph(fn, ln):
     fullname_color_div = []
 
     for letter in f"{fn} {ln}":
-        style = {"width": "30px", "height": "30px"}
+        style = {
+            "width": "30px",
+            "height": "30px",
+            "justify": "center",
+        }
 
         if letter == " ":  # add BG_COLOR div between names
             color = BG_COLOR
@@ -201,7 +210,11 @@ def color_frequency(fn, ln):
 
         div = html.Div(
             children=[color_list, *color_frequency],
-            style={"display": "flex"},
+            style={
+                "display": "flex",
+                # "justify-content": "center",
+                "margin-left": "30%",
+            },
         )
 
         color_frequency_div.append(div)
