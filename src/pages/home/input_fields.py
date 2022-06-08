@@ -31,7 +31,6 @@ firstname_input = dbc.Input(
     placeholder="First name",
     persistence=True,
     persistence_type="session",
-    inputmode="latin-name"
     # value="Joris",
 )
 lastname_input = dbc.Input(
