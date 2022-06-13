@@ -24,13 +24,20 @@ birthdate_color_display = html.Div(
 )
 birthdate_title_display = html.H3(
     id="birthdate_title",
-    style={"text-align": "center", "text-transform": "uppercase"},
+    style={
+        "text-align": "center",
+        "text-transform": "uppercase",
+        "margin-top": "20px",
+    },
 )
 
 birthdate_keywords_display = html.H4(
     children=[],
     id="birthdate_keywords",
-    style={"text-align": "center"},
+    style={
+        "text-align": "center",
+        "margin-top": "20px",
+    },
 )
 
 birthdate_results = dbc.Row(
@@ -51,7 +58,6 @@ color_glyph_container = dbc.Col(
         "display": "flex",
         "justify-content": "center",
     },
-    
 )
 
 color_frequency_container = dbc.Col(
@@ -65,7 +71,10 @@ color_frequency_container = dbc.Col(
 second_row_container = html.Div(
     dbc.Row(
         children=[color_glyph_container, color_frequency_container],
-        style={"justify": "center"},
+        style={
+            "justify": "center",
+            "margin-top": "20px",
+        },
     )
 )
 
@@ -97,9 +106,11 @@ def birthdate_color(dob, mob, yob, indicator_style):
     new_indicator_style = indicator_style
 
     cd = ColorData(digit)
+
     if digit is not None:
+        title = f"{cd.color_digit} ─ {cd.title}"
         new_indicator_style["background-color"] = cd.color_code
-        return cd.title, new_indicator_style, cd.keywords
+        return title, new_indicator_style, cd.keywords
     else:
         new_indicator_style["background-color"] = BG_COLOR
         return "", new_indicator_style, ""
@@ -120,7 +131,7 @@ def color_glyph(fn, ln):
     for letter in f"{fn} {ln}":
         style = {
             "width": "30px",
-            "height": "30px",
+            "height": "200px",
             "justify": "center",
         }
 
