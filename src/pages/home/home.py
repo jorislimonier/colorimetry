@@ -20,6 +20,7 @@ birthdate_color_display = html.Div(
         "width": "100px",
         "height": "100px",
         "margin": "auto",
+        "border-radius": "10px",
     },
 )
 birthdate_title_display = html.H3(
@@ -52,8 +53,17 @@ birthdate_results = dbc.Row(
 )
 
 # Second row
-color_glyph_container = dbc.Col(
-    id="color_glyph_container",
+color_glyph_container_firstname = dbc.Col(
+    id="color_glyph_container_firstname",
+    style={
+        "display": "flex",
+        "justify-content": "center",
+        "margin-bottom": "100px"
+    },
+)
+
+color_glyph_container_lastname = dbc.Col(
+    id="color_glyph_container_lastname",
     style={
         "display": "flex",
         "justify-content": "center",
@@ -62,15 +72,16 @@ color_glyph_container = dbc.Col(
 
 color_frequency_container = dbc.Col(
     id="color_frequency_container",
-    style={
-        "justify-content": "center",
-        "margin": "auto",
-    },
+    style={},
 )
 
 second_row_container = html.Div(
     dbc.Row(
-        children=[color_glyph_container, color_frequency_container],
+        children=[
+            color_glyph_container_firstname,
+            color_glyph_container_lastname,
+            color_frequency_container,
+        ],
         style={
             "justify": "center",
             "margin-top": "20px",
@@ -116,23 +127,20 @@ def birthdate_color(dob, mob, yob, indicator_style):
         return "", new_indicator_style, ""
 
 
-@callback(
-    Output("color_glyph_container", "children"),
-    Input("firstname_input", "value"),
-    Input("lastname_input", "value"),
-)
-def color_glyph(fn, ln):
-    """Return the color glyph from first and last names"""
-    if (fn is None) or (ln is None):
+def color_glyph(name: str):
+    """Return the color glyph from a given name"""
+    if name is None:
         return dash.no_update
 
-    fullname_color_div = []
+    name_color_div = []
 
-    for letter in f"{fn} {ln}":
+    for letter in name:
         style = {
-            "width": "30px",
-            "height": "200px",
+            "width": "25px",
+            "height": "180px",
             "justify": "center",
+            "align-items": "center",
+            "margin": "auto",
         }
 
         if letter == " ":  # add BG_COLOR div between names
@@ -141,9 +149,12 @@ def color_glyph(fn, ln):
         else:  # get color for the given letter
             digit = utils.digit_from_str(letter)
             color = ColorData(digit).color_code
-            style[
-                "box-shadow"
-            ] = "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)"
+            style["box-shadow"] = ",".join(
+                [
+                    "0 1px 6px rgba(0, 0, 0, 0.1)",
+                    "0 1px 4px rgba(0, 0, 0, 0.5)",
+                ]
+            )
 
         style["background-color"] = color
 
@@ -157,24 +168,42 @@ def color_glyph(fn, ln):
         )
 
         # concatenate color and letter divs
-        div = html.Div(
+        div = dbc.Col(
             children=[color_display, letter_display],
             style={"margin-left": "10px"},
         )
 
-        fullname_color_div.append(div)
+        name_color_div.append(div)
 
-    return fullname_color_div
+    return name_color_div
+
+
+@callback(
+    Output("color_glyph_container_firstname", "children"),
+    Input("firstname_input", "value"),
+)
+def color_glyph_firstname(fn: str) -> list:
+    """Apply color glyph to firstname"""
+    return color_glyph(fn)
+
+
+@callback(
+    Output("color_glyph_container_lastname", "children"),
+    Input("lastname_input", "value"),
+)
+def color_glyph_lastname(ln: str) -> list:
+    """Apply color glyph to lastname"""
+    return color_glyph(ln)
 
 
 @callback(
     Output("color_frequency_container", "children"),
-    Input("firstname_input", "value"),
+    Input("lastname_input", "value"),
     Input("lastname_input", "value"),
 )
-def color_frequency(fn, ln):
+def color_frequency(fn: str, ln: str) -> list:
     """Return the color glyph from first and last names"""
-    if (fn == "") or (ln == "") or (fn is None) or (ln is None):
+    if (fn is None) or (ln is None):
         return dash.no_update
 
     color_frequency_div = []
@@ -202,7 +231,12 @@ def color_frequency(fn, ln):
                 "height": "30px",
                 "margin-right": "50px",
                 "margin-bottom": "15px",
-                "box-shadow": "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)",
+                "box-shadow": ",".join(
+                    [
+                        "0 1px 6px rgba(0, 0, 0, 0.1)",
+                        "0 1px 4px rgba(0, 0, 0, 0.5)",
+                    ]
+                ),
             }
         )
 
