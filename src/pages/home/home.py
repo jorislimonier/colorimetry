@@ -55,11 +55,11 @@ birthdate_results = dbc.Row(
 # Second row
 color_glyph_container_firstname = dbc.Col(
     id="color_glyph_container_firstname",
-    style={
-        "display": "flex",
-        "justify-content": "center",
-        "margin-bottom": "100px"
-    },
+    style={"display": "flex", "justify-content": "center", "margin-bottom": "100px"},
+    sm=12,
+    md=12,
+    lg=10,
+    xl=10,
 )
 
 color_glyph_container_lastname = dbc.Col(
@@ -68,11 +68,23 @@ color_glyph_container_lastname = dbc.Col(
         "display": "flex",
         "justify-content": "center",
     },
+    sm=12,
+    md=6,
+    lg=6,
+    xl=6,
 )
 
 color_frequency_container = dbc.Col(
     id="color_frequency_container",
-    style={},
+    style={
+        # "margin-left": "auto",
+        # "align-items": "center",
+        # "justify-content": "center",
+    },
+    sm=12,
+    md=6,
+    lg=6,
+    xl=6,
 )
 
 second_row_container = html.Div(
@@ -83,7 +95,7 @@ second_row_container = html.Div(
             color_frequency_container,
         ],
         style={
-            "justify": "center",
+            "justify-content": "center",
             "margin-top": "20px",
         },
     )
@@ -257,8 +269,7 @@ def color_frequency(fn: str, ln: str) -> list:
             children=[color_list, *color_frequency],
             style={
                 "display": "flex",
-                # "justify-content": "center",
-                "margin-left": "30%",
+                "margin-left": "5%",
             },
         )
 
