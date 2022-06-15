@@ -4,6 +4,7 @@ venv
 .DS_Store
 .env
 .vscode
+.~lock*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
