@@ -1,12 +1,11 @@
 rouge:
-  archetypes:
-    archetype1:
-      title: Le Pionnier
-      description: >
-        Le pionnier prend des mesures et ose pénêtrer sur un nouveau territoire inexploité. Le pionnier reste concentré sur ce qu'il/elle doit accomplir et ne recule devant rien pour y parvenir. Lorsque nous avons de nouveaux projets et de nouvelles idées à explorer, vous pouvez être sûr que le pionnier est prêt et attend de vous aider.
-    archetype2:
-      title: La Victime
-      description: >
+  archetype1:
+    title: Le Pionnier
+    description: >
+      Le pionnier prend des mesures et ose pénêtrer sur un nouveau territoire inexploité. Le pionnier reste concentré sur ce qu'il/elle doit accomplir et ne recule devant rien pour y parvenir. Lorsque nous avons de nouveaux projets et de nouvelles idées à explorer, vous pouvez être sûr que le pionnier est prêt et attend de vous aider.
+  archetype2:
+    title: La Victime
+    description: >
         La victime estime qu'elle n'a pas le choix dans ce monde, tout et tout le monde a le pouvoir. Elle reste bloquée dans un état de peur sans aucun sens de l'autonomisation. La victime est active dans notre psyché lorsque nous oublions comment prendre soin de nous-mêmes et que nous nous tournons vers les autres pour le faire pour nous.
   keywords: Dynamique, Actif, Immédiat, Impatient, Rapide, Agité, Énergie brute, Insouciant, Frustration, Activité physique, Colère, Luxure, Amour physique, Impulsif, Impétueux, Extrême, Excitabilité.
   description: |
@@ -21,7 +20,7 @@ orange:
   archetype1:
     title: Le Martyr
     description: >
-      Syndrome du pauvre moi. Cette personne essaie de controler les autres par la culpabilité "après tout ce que j'ai fait pour vous". Une vie remplie de souffrance, la croyance du «je ne mérite pas», une vie de manque. Cette personne a souvent l'impression de mériter la vie difficile qu'elle mène : une vie de limitations, ou de dépenses excessives par exemple, la thérapie est très souvent d'une grande aide pour quelqu'un avec un archétype martyr actif, car elle devient un substitut au manque d'amour. Difficulté 4 identifier sa sexualité et ses préférences, déséquilibre entre hommes et femmes. Le martyr crée des relations pour rester en sécurité et peut-être qu'après des années de souffrance et de culpabilité, il peut se permettre d'être vraiment heureux.
+      Syndrome du pauvre moi. Cette personne essaie de controler les autres par la culpabilité "après tout ce que j'ai fait pour vous". Une vie remplie de souffrance, la croyance du «je ne mérite pas», une vie de manque. Cette personne a souvent l'impression de mériter la vie difficile qu'elle mène : une vie de limitations, ou de dépenses excessives par exemple, la thérapie est très souvent d'une grande aide pour quelqu'un avec un archétype martyr actif, car elle devient un substitut au manque d'amour. Difficulté à identifier sa sexualité et ses préférences, déséquilibre entre hommes et femmes. Le martyr crée des relations pour rester en sécurité et peut-être qu'après des années de souffrance et de culpabilité, il peut se permettre d'être vraiment heureux.
   archetype2:
     title: L'Empereur/L'Impératrice
     description: >
@@ -150,7 +149,7 @@ rose:
     Vous êtes amical et aimant envers ceux qui vous entourent, mais vous oubliez parfois que vous avez aussi besoin d'aide et de soutien. C'est parce que vous êtes souvent tellement occupé à vous occuper du reste du monde que vous ignorez les choses tout près de chez vous et cela peut vous amener à ressentir un sentiment d'isolement et de solitude.
     En période de stress, votre niveau de tolérance devient minime et les sont très surpris de vous voir exploser soudainement comme un volcan. Les conditions physiques peuvent se manifester par des problèmes au bas du dos et des contusions et coups récurrents.
 
-dore:
+doré:
   archetype1:
     title: Le Sage
     description: >
