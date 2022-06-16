@@ -55,11 +55,10 @@ birthdate_results = dbc.Row(
 # Second row
 color_glyph_container_firstname = dbc.Col(
     id="color_glyph_container_firstname",
-    style={"display": "flex", "justify-content": "center", "margin-bottom": "100px"},
-    sm=12,
-    md=12,
-    lg=10,
-    xl=10,
+    style={
+        "display": "flex",
+        "margin-bottom": "100px",
+    },
 )
 
 color_glyph_container_lastname = dbc.Col(
@@ -68,23 +67,11 @@ color_glyph_container_lastname = dbc.Col(
         "display": "flex",
         "justify-content": "center",
     },
-    sm=12,
-    md=6,
-    lg=6,
-    xl=6,
 )
 
 color_frequency_container = dbc.Col(
     id="color_frequency_container",
-    style={
-        # "margin-left": "auto",
-        # "align-items": "center",
-        # "justify-content": "center",
-    },
-    sm=12,
-    md=6,
-    lg=6,
-    xl=6,
+    style={},
 )
 
 second_row_container = html.Div(
@@ -139,6 +126,58 @@ def birthdate_color(dob, mob, yob, indicator_style):
         return "", new_indicator_style, ""
 
 
+@callback(
+    Output("color_glyph_container_firstname", "children"),
+    Output("color_glyph_container_lastname", "children"),
+    Output("color_glyph_container_firstname", "xl"),
+    Output("color_glyph_container_lastname", "xl"),
+    Output("color_frequency_container", "xl"),
+    Output("color_glyph_container_firstname", "lg"),
+    Output("color_glyph_container_lastname", "lg"),
+    Output("color_frequency_container", "lg"),
+    Output("color_glyph_container_firstname", "md"),
+    Output("color_glyph_container_lastname", "md"),
+    Output("color_frequency_container", "md"),
+    Output("color_glyph_container_firstname", "sm"),
+    Output("color_glyph_container_lastname", "sm"),
+    Output("color_frequency_container", "sm"),
+    Output("color_frequency_container", "children"),
+    Input("firstname_input", "value"),
+    Input("lastname_input", "value"),
+)
+def name_results(fn: str, ln: str) -> list:
+    """Display the color glyph for firstname and lastname,
+    as well as the color frequency:"""
+    color_glyphs = color_glyph(fn), color_glyph(ln)
+    color_freq = color_frequency(fn, ln)
+    fullname_length = len(f"{fn} {ln}")
+
+    firstname_span = int(12 * len(fn) / fullname_length)
+    lastname_span = 12 - firstname_span
+
+    if fullname_length < 15:
+        # firstname, lastname, frequency
+        val = 1.4
+        print(val)
+        xl = firstname_span // 2, lastname_span // 2, 4
+        lg = firstname_span // 2, lastname_span // 2, 4
+        md = firstname_span // val, lastname_span // val, 10
+        sm = 12, 12, 6
+    elif fullname_length < 30:
+        # firstname, lastname
+        xl = firstname_span, lastname_span, 12
+        lg = 10, 6, 6
+        md = 12, 6, 6
+        sm = 12, 12, 6
+    else:
+        # firstname, lastname
+        xl = 10, 6, 12
+        lg = 10, 6, 6
+        md = 12, 6, 6
+        sm = 12, 12, 6
+    return *color_glyphs, *xl, *lg, *md, *sm, color_freq
+
+
 def color_glyph(name: str):
     """Return the color glyph from a given name"""
     if name is None:
@@ -182,7 +221,7 @@ def color_glyph(name: str):
         # concatenate color and letter divs
         div = dbc.Col(
             children=[color_display, letter_display],
-            style={"margin-left": "10px"},
+            style={"margin-left": "1px"},
         )
 
         name_color_div.append(div)
@@ -190,29 +229,6 @@ def color_glyph(name: str):
     return name_color_div
 
 
-@callback(
-    Output("color_glyph_container_firstname", "children"),
-    Input("firstname_input", "value"),
-)
-def color_glyph_firstname(fn: str) -> list:
-    """Apply color glyph to firstname"""
-    return color_glyph(fn)
-
-
-@callback(
-    Output("color_glyph_container_lastname", "children"),
-    Input("lastname_input", "value"),
-)
-def color_glyph_lastname(ln: str) -> list:
-    """Apply color glyph to lastname"""
-    return color_glyph(ln)
-
-
-@callback(
-    Output("color_frequency_container", "children"),
-    Input("lastname_input", "value"),
-    Input("lastname_input", "value"),
-)
 def color_frequency(fn: str, ln: str) -> list:
     """Return the color glyph from first and last names"""
     if (fn is None) or (ln is None):
@@ -269,7 +285,8 @@ def color_frequency(fn: str, ln: str) -> list:
             children=[color_list, *color_frequency],
             style={
                 "display": "flex",
-                "margin-left": "5%",
+                "margin-left": "10%",
+                # "justify-content": "center"
             },
         )
 
