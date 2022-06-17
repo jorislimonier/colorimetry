@@ -57,7 +57,7 @@ color_glyph_container_firstname = dbc.Col(
     id="color_glyph_container_firstname",
     style={
         "display": "flex",
-        "margin-bottom": "100px",
+        "margin-top": "50px",
     },
 )
 
@@ -66,12 +66,15 @@ color_glyph_container_lastname = dbc.Col(
     style={
         "display": "flex",
         "justify-content": "center",
+        "margin-top": "50px",
     },
 )
 
 color_frequency_container = dbc.Col(
     id="color_frequency_container",
-    style={},
+    style={
+        "margin-top": "50px",
+    },
 )
 
 second_row_container = html.Div(
@@ -155,7 +158,6 @@ def name_results(fn: str, ln: str) -> list:
         fullname_length = 0
         firstname_span = 6
     else:
-        print(fn, ln)
         fullname_length = len(f"{fn} {ln}")
         firstname_span = int(12 * len(fn) / fullname_length)
     lastname_span = 12 - firstname_span
@@ -166,7 +168,7 @@ def name_results(fn: str, ln: str) -> list:
         xl = firstname_span // 2, lastname_span // 2, 4
         lg = firstname_span // 2, lastname_span // 2, 4
         md = firstname_span // val, lastname_span // val, 10
-        sm = 12, 12, 6
+        sm = 12, 12, 12
     elif fullname_length < 30:
         # firstname, lastname
         xl = firstname_span, lastname_span, 12
@@ -175,10 +177,10 @@ def name_results(fn: str, ln: str) -> list:
         sm = 12, 12, 6
     else:
         # firstname, lastname
-        xl = 10, 6, 12
-        lg = 10, 6, 6
-        md = 12, 6, 6
-        sm = 12, 12, 6
+        xl = 12, 12, 12
+        lg = 12, 12, 12
+        md = 12, 12, 12
+        sm = 12, 12, 12
     return *color_glyphs, *xl, *lg, *md, *sm, color_freq
 
 
