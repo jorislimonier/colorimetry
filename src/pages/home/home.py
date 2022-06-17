@@ -148,17 +148,21 @@ def birthdate_color(dob, mob, yob, indicator_style):
 def name_results(fn: str, ln: str) -> list:
     """Display the color glyph for firstname and lastname,
     as well as the color frequency:"""
+
     color_glyphs = color_glyph(fn), color_glyph(ln)
     color_freq = color_frequency(fn, ln)
-    fullname_length = len(f"{fn} {ln}")
-
-    firstname_span = int(12 * len(fn) / fullname_length)
+    if fn is None or ln is None:
+        fullname_length = 0
+        firstname_span = 6
+    else:
+        print(fn, ln)
+        fullname_length = len(f"{fn} {ln}")
+        firstname_span = int(12 * len(fn) / fullname_length)
     lastname_span = 12 - firstname_span
 
     if fullname_length < 15:
         # firstname, lastname, frequency
         val = 1.4
-        print(val)
         xl = firstname_span // 2, lastname_span // 2, 4
         lg = firstname_span // 2, lastname_span // 2, 4
         md = firstname_span // val, lastname_span // val, 10
@@ -231,8 +235,12 @@ def color_glyph(name: str):
 
 def color_frequency(fn: str, ln: str) -> list:
     """Return the color glyph from first and last names"""
-    if (fn is None) or (ln is None):
+    if fn is None and ln is None:
         return dash.no_update
+    if fn is None:
+        fn = ""
+    if ln is None:
+        ln = ""
 
     color_frequency_div = []
 
