@@ -57,6 +57,7 @@ color_glyph_container_firstname = dbc.Col(
     id="color_glyph_container_firstname",
     style={
         "display": "flex",
+        "justify-content": "center",
         "margin-top": "50px",
     },
 )
@@ -85,7 +86,7 @@ second_row_container = html.Div(
             color_frequency_container,
         ],
         style={
-            "justify-content": "center",
+            "justify": "center",
             "margin-top": "20px",
         },
     )
@@ -162,15 +163,17 @@ def name_results(fn: str, ln: str) -> list:
         firstname_span = int(12 * len(fn) / fullname_length)
     lastname_span = 12 - firstname_span
 
-    if fullname_length < 15:
+    if fullname_length < 25:
         # firstname, lastname, frequency
         val = 1.4
         xl = firstname_span // 2, lastname_span // 2, 4
+        print(xl)
         lg = firstname_span // 2, lastname_span // 2, 4
         md = firstname_span // val, lastname_span // val, 10
         sm = 12, 12, 12
-    elif fullname_length < 30:
+    elif fullname_length < 50:
         # firstname, lastname
+        print(firstname_span, lastname_span)
         xl = firstname_span, lastname_span, 12
         lg = 10, 6, 6
         md = 12, 6, 6
@@ -225,9 +228,12 @@ def color_glyph(name: str):
         )
 
         # concatenate color and letter divs
-        div = dbc.Col(
+        div = html.Div(
             children=[color_display, letter_display],
-            style={"margin-left": "1px"},
+            style={
+                "margin-left": "0px",
+                "display": "inline",
+            },
         )
 
         name_color_div.append(div)
