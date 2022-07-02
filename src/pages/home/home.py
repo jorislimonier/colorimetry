@@ -1,3 +1,5 @@
+import re
+
 import dash
 import dash_bootstrap_components as dbc
 import pandas as pd
@@ -5,60 +7,20 @@ from dash import callback, html
 from dash.dependencies import Input, Output, State
 from src import utils
 from src.color_data import ColorData
-from src.pages.home.input_fields import input_fields
+from src.components.input_fields import input_fields
+from src.components.summary import summary_results
+from src.constants import BG_COLOR
 
-BG_COLOR = "white"
+title = html.H1("The Colour Path", style={"textAlign": "center"})
 
-
-title = html.H1("The Colour Path", style={"text-align": "center"})
-
-
-birthdate_color_display = html.Div(
-    id="birthdate_color",
-    style={
-        "background-color": BG_COLOR,
-        "width": "100px",
-        "height": "100px",
-        "margin": "auto",
-        "border-radius": "10px",
-    },
-)
-birthdate_title_display = html.H3(
-    id="birthdate_title",
-    style={
-        "text-align": "center",
-        "text-transform": "uppercase",
-        "margin-top": "20px",
-    },
-)
-
-birthdate_keywords_display = html.H4(
-    children=[],
-    id="birthdate_keywords",
-    style={
-        "text-align": "center",
-        "margin-top": "20px",
-    },
-)
-
-birthdate_results = dbc.Row(
-    dbc.Col(
-        children=[
-            birthdate_color_display,
-            birthdate_title_display,
-            birthdate_keywords_display,
-        ],
-        width={"size": 10, "offset": 1},
-    )
-)
 
 # Second row
 color_glyph_container_firstname = dbc.Col(
     id="color_glyph_container_firstname",
     style={
         "display": "flex",
-        "justify-content": "center",
-        "margin-top": "50px",
+        "justifyContent": "center",
+        "marginTop": "50px",
     },
 )
 
@@ -66,15 +28,15 @@ color_glyph_container_lastname = dbc.Col(
     id="color_glyph_container_lastname",
     style={
         "display": "flex",
-        "justify-content": "center",
-        "margin-top": "50px",
+        "justifyContent": "center",
+        "marginTop": "50px",
     },
 )
 
 color_frequency_container = dbc.Col(
     id="color_frequency_container",
     style={
-        "margin-top": "50px",
+        "marginTop": "50px",
     },
 )
 
@@ -86,8 +48,8 @@ second_row_container = html.Div(
             color_frequency_container,
         ],
         style={
-            "justify": "center",
-            "margin-top": "20px",
+            "justify ": "center",
+            "marginTop": "20px",
         },
     )
 )
@@ -96,13 +58,14 @@ layout = [
     # title,
     input_fields,
     html.Br(),
-    birthdate_results,
+    summary_results,
     html.Br(),
     second_row_container,
 ]
 
-
+# ------ COLOUR PATH ------
 @callback(
+    Output("birthdate_section_title", "children"),
     Output("birthdate_title", "children"),
     Output("birthdate_color", "style"),
     Output("birthdate_keywords", "children"),
@@ -122,12 +85,49 @@ def birthdate_color(dob, mob, yob, indicator_style):
     cd = ColorData(digit)
 
     if digit is not None:
-        title = f"{cd.color_digit} ─ {cd.title}"
-        new_indicator_style["background-color"] = cd.color_code
-        return title, new_indicator_style, cd.keywords
+        birthdate_section_title = "Colour path"
+        title = f"Colour path: {cd.color_digit} ─ {cd.title}"
+        new_indicator_style["backgroundColor"] = cd.color_code
+        return birthdate_section_title, title, new_indicator_style, cd.keywords
     else:
-        new_indicator_style["background-color"] = BG_COLOR
-        return "", new_indicator_style, ""
+        new_indicator_style["backgroundColor"] = BG_COLOR
+        return "", "", new_indicator_style, ""
+
+
+# ------ OUTER SELF ------
+@callback(
+    Output("fullname_section_title", "children"),
+    Output("fullname_title", "children"),
+    Output("fullname_color", "style"),
+    Output("fullname_keywords", "children"),
+    Input("firstname_input", "value"),
+    Input("lastname_input", "value"),
+    State("fullname_color", "style"),
+)
+def fullname_color(
+    fn: str, ln: str, indicator_style: dict
+) -> tuple[str, str, dict, str]:
+    """Display fullname color"""
+    if fn is None or ln is None:
+        return dash.no_update
+
+    fn = re.sub(r"[^a-zA-Z]", "", fn)
+    ln = re.sub(r"[^a-zA-Z]", "", ln)
+    
+    digit = utils.digit_from_str(f"{fn}{ln}")
+    new_indicator_style = indicator_style
+
+    cd = ColorData(digit)
+
+    if 1 <= digit <= 9:
+        fullname_section_title = "Outer self"
+        title = f"{cd.color_digit} ─ {cd.title}"
+        new_indicator_style["backgroundColor"] = cd.color_code
+        return fullname_section_title, title, new_indicator_style, cd.keywords
+    else:
+        print("digit none")
+        new_indicator_style["backgroundColor"] = BG_COLOR
+        return "", "", new_indicator_style, ""
 
 
 @callback(
@@ -149,12 +149,25 @@ def birthdate_color(dob, mob, yob, indicator_style):
     Input("firstname_input", "value"),
     Input("lastname_input", "value"),
 )
-def name_results(fn: str, ln: str) -> list:
+def name_results(
+    fn: str, ln: str
+) -> tuple[
+    list, list, int, int, int, int, int, int, int, int, int, int, int, int, list
+]:
     """Display the color glyph for firstname and lastname,
     as well as the color frequency:"""
 
-    color_glyphs = color_glyph(fn), color_glyph(ln)
-    color_freq = color_frequency(fn, ln)
+    if fn == "" and ln == "":
+        color_glyphs = [], []
+        color_freq = []
+
+    else:
+        fn = re.sub(r"[^a-zA-Z]", " ", fn)
+        ln = re.sub(r"[^a-zA-Z]", " ", ln)
+
+        color_glyphs = color_glyph(fn), color_glyph(ln)
+        color_freq = color_frequency(fn, ln)
+
     if fn is None or ln is None:
         fullname_length = 0
         firstname_span = 6
@@ -167,13 +180,11 @@ def name_results(fn: str, ln: str) -> list:
         # firstname, lastname, frequency
         val = 1.4
         xl = firstname_span // 2, lastname_span // 2, 4
-        print(xl)
         lg = firstname_span // 2, lastname_span // 2, 4
         md = firstname_span // val, lastname_span // val, 10
         sm = 12, 12, 12
     elif fullname_length < 50:
         # firstname, lastname
-        print(firstname_span, lastname_span)
         xl = firstname_span, lastname_span, 12
         lg = 10, 6, 6
         md = 12, 6, 6
@@ -187,7 +198,7 @@ def name_results(fn: str, ln: str) -> list:
     return *color_glyphs, *xl, *lg, *md, *sm, color_freq
 
 
-def color_glyph(name: str):
+def color_glyph(name: str) -> list:
     """Return the color glyph from a given name"""
     if name is None:
         return dash.no_update
@@ -199,7 +210,7 @@ def color_glyph(name: str):
             "width": "25px",
             "height": "180px",
             "justify": "center",
-            "align-items": "center",
+            "alignItems": "center",
             "margin": "auto",
         }
 
@@ -209,14 +220,14 @@ def color_glyph(name: str):
         else:  # get color for the given letter
             digit = utils.digit_from_str(letter)
             color = ColorData(digit).color_code
-            style["box-shadow"] = ",".join(
+            style["boxShadow"] = ",".join(
                 [
                     "0 1px 6px rgba(0, 0, 0, 0.1)",
                     "0 1px 4px rgba(0, 0, 0, 0.5)",
                 ]
             )
 
-        style["background-color"] = color
+        style["backgroundColor"] = color
 
         # make div with appropriate color
         color_display = html.Div(style=style)
@@ -224,14 +235,14 @@ def color_glyph(name: str):
         # make div with uppercase letter
         letter_display = html.H3(
             children=letter.upper(),
-            style={"text-align": "center"},
+            style={"textAlign": "center"},
         )
 
         # concatenate color and letter divs
         div = html.Div(
             children=[color_display, letter_display],
             style={
-                "margin-left": "0px",
+                "marginLeft": "0px",
                 "display": "inline",
             },
         )
@@ -270,12 +281,12 @@ def color_frequency(fn: str, ln: str) -> list:
         # make div with appropriate color
         color_list = html.Div(
             style={
-                "background-color": row["color_code"],
+                "backgroundColor": row["color_code"],
                 "width": "30px",
                 "height": "30px",
-                "margin-right": "50px",
-                "margin-bottom": "15px",
-                "box-shadow": ",".join(
+                "marginRight": "50px",
+                "marginBottom": "15px",
+                "boxShadow": ",".join(
                     [
                         "0 1px 6px rgba(0, 0, 0, 0.1)",
                         "0 1px 4px rgba(0, 0, 0, 0.5)",
@@ -287,11 +298,11 @@ def color_frequency(fn: str, ln: str) -> list:
         color_frequency = [
             html.Div(
                 style={
-                    "background-color": row["color_code"],
+                    "backgroundColor": row["color_code"],
                     "width": "30px",
                     "height": "30px",
-                    "margin-left": "10px",
-                    "box-shadow": "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)",
+                    "marginLeft": "10px",
+                    "boxShadow": "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)",
                 }
             )
             for _ in range(row["count"])
@@ -301,8 +312,8 @@ def color_frequency(fn: str, ln: str) -> list:
             children=[color_list, *color_frequency],
             style={
                 "display": "flex",
-                "margin-left": "10%",
-                # "justify-content": "center"
+                "marginLeft": "10%",
+                # "justifyContent": "center"
             },
         )
 

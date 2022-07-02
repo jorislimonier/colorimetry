@@ -12,7 +12,7 @@ for color in COLOR_LIST:
 
     title = html.H2(
         children=f"{color_data['color'].capitalize()} ─ Archétypes",
-        style={"text-align": "center"},
+        style={"textAlign": "center"},
     )
 
     title_width = {"sm": 5, "md": 5, "lg": 4}
@@ -37,7 +37,7 @@ for color in COLOR_LIST:
         rows.append(
             dbc.Row(
                 children=[archetype_title, archetype_descr],
-                style={"margin-top": "30px"},
+                style={"marginTop": "30px"},
             )
         )
 
@@ -45,7 +45,7 @@ for color in COLOR_LIST:
         dbc.Row(
             dbc.Col(
                 children=html.H3("Description du chemin de vie"),
-                style={"text-align": "center", "margin-top": "30px"},
+                style={"textAlign": "center", "marginTop": "30px"},
             ),
         )
     )
@@ -55,7 +55,7 @@ for color in COLOR_LIST:
                 color_data["description"],
                 width={"size": 10, "offset": 1},
             ),
-            style={"margin-top": "20px"},
+            style={"marginTop": "20px"},
         ),
     )
 
