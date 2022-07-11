@@ -10,9 +10,7 @@ from src import utils
 from src.color_data import ColorData
 from src.components.input_fields import input_fields
 from src.components.summary import summary_results
-from src.constants import BG_COLOR
-
-title = html.H1("The Colour Path", style={"textAlign": "center"})
+from src.constants import BG_COLOR, VOWELS
 
 
 # Second row
@@ -53,49 +51,64 @@ layout = [
     second_row_container,
 ]
 
-# ------ COLOUR PATH ------
+# ------ COLOR PATH ------
 @callback(
-    Output("birthdate_section_title", "children"),
-    Output("birthdate_title", "children"),
-    Output("birthdate_color", "style"),
-    Output("birthdate_keywords", "children"),
+    Output("color_path_section_title", "children"),
+    Output("color_path_title", "children"),
+    Output("color_path_section_color", "style"),
+    Output("color_path_section_keywords", "children"),
     Input("dob_input", "value"),
     Input("mob_input", "value"),
     Input("yob_input", "value"),
-    State("birthdate_color", "style"),
+    State("color_path_section_color", "style"),
 )
-def birthdate_color(dob, mob, yob, indicator_style):
+def color_path_section_color(dob, mob, yob, color_div_style):
     """Display birthdate color"""
     if dob is None or mob is None or yob is None:
         return dash.no_update
 
     digit = utils.digit_from_number(f"{dob}{mob}{yob}")
-    new_indicator_style = indicator_style
+    new_color_div_style = color_div_style
 
     cd = ColorData(digit)
 
     if digit is not None:
-        birthdate_section_title = "Colour path"
-        title = f"Colour path: {cd.color_digit} ─ {cd.title}"
-        new_indicator_style["backgroundColor"] = cd.color_code
-        return birthdate_section_title, title, new_indicator_style, cd.keywords
+        color_path_section_title = "Color path"
+        title = f"{cd.color_digit} ─ {cd.title}"
+        new_color_div_style["backgroundColor"] = cd.color_code
+        return color_path_section_title, title, new_color_div_style, cd.keywords
     else:
-        new_indicator_style["backgroundColor"] = BG_COLOR
-        return "", "", new_indicator_style, ""
+        new_color_div_style["backgroundColor"] = BG_COLOR
+        return "", "", new_color_div_style, ""
 
 
 # ------ OUTER SELF ------
 @callback(
-    Output("fullname_section_title", "children"),
-    Output("fullname_title", "children"),
-    Output("fullname_color", "style"),
-    Output("fullname_keywords", "children"),
+    *[
+        (
+            Output(f"{prefix}_self_section_title", "children"),
+            Output(f"{prefix}_self_title", "children"),
+            Output(f"{prefix}_self_section_color", "style"),
+            Output(f"{prefix}_self_section_keywords", "children"),
+        )
+        for prefix in [
+            "outer",
+            "inner",
+            "latent",
+        ]
+    ],
     Input("firstname_input", "value"),
     Input("lastname_input", "value"),
-    State("fullname_color", "style"),
+    State("outer_self_section_color", "style"),
+    State("inner_self_section_color", "style"),
+    State("latent_self_section_color", "style"),
 )
-def fullname_color(
-    fn: str, ln: str, indicator_style: dict
+def outer_self_section_color(
+    fn: str,
+    ln: str,
+    outer_self_color_div_style: dict,
+    inner_self_color_div_style: dict,
+    latent_self_color_div_style: dict,
 ) -> tuple[str, str, dict, str]:
     """Display fullname color"""
     if fn is None or ln is None:
@@ -103,23 +116,50 @@ def fullname_color(
 
     fn = unidecode(fn)
     ln = unidecode(ln)
+
     fn = re.sub(r"[^a-zA-Z]", "", fn)
     ln = re.sub(r"[^a-zA-Z]", "", ln)
 
-    digit = utils.digit_from_str(f"{fn}{ln}")
-    new_indicator_style = indicator_style
+    fullname = f"{fn}{ln}"
+
+    outer_self_elements = section_elements(
+        color_div_style=outer_self_color_div_style, start_string=fullname
+    )
+
+    start_string = "".join(c for c in fullname if c in VOWELS)
+    inner_self_elements = section_elements(
+        color_div_style=inner_self_color_div_style, start_string=start_string
+    )
+
+    start_string = "".join(c for c in fullname if c not in VOWELS)
+    latent_self_elements = section_elements(
+        color_div_style=latent_self_color_div_style, start_string=start_string
+    )
+
+    return (
+        "Outer self",
+        *outer_self_elements,
+        "Inner self",
+        *inner_self_elements,
+        "Latent self",
+        *latent_self_elements,
+    )
+
+
+def section_elements(color_div_style, start_string):
+    digit = utils.digit_from_str(start_string)
+    new_color_div_style = color_div_style
 
     cd = ColorData(digit)
 
     if 1 <= digit <= 9:
-        fullname_section_title = "Outer self"
         title = f"{cd.color_digit} ─ {cd.title}"
-        new_indicator_style["backgroundColor"] = cd.color_code
-        return fullname_section_title, title, new_indicator_style, cd.keywords
+        new_color_div_style["backgroundColor"] = cd.color_code
+        return title, new_color_div_style, cd.keywords
     else:
         print("digit none")
-        new_indicator_style["backgroundColor"] = BG_COLOR
-        return "", "", new_indicator_style, ""
+        new_color_div_style["backgroundColor"] = BG_COLOR
+        return "", new_color_div_style, ""
 
 
 @callback(
@@ -142,11 +182,12 @@ def name_results(
     """Display the color glyph for firstname and lastname,
     as well as the color frequency:"""
 
-    if fn == "" and ln == "" or fn is None or ln is None:
+    if fn is None or ln is None:
+        dash.no_update
+    if fn == "" and ln == "":
         glyph = []
         color_freq = []
         fullname_length = 0
-        firstname_span = 6
 
     else:
         fn = unidecode(fn)
@@ -159,21 +200,13 @@ def name_results(
         color_freq = color_frequency(fn, ln)
 
         fullname_length = len(f"{fn}{ln}")
-        firstname_span = int(12 * len(fn) / fullname_length)
 
-    if fullname_length < 25:
+    if fullname_length < 20:
         # name, frequency
-        val = 1.4
         xl = 7, 5
         lg = 7, 5
-        md = firstname_span // val, 10
+        md = 10, 10
         sm = 12, 12
-    elif fullname_length < 50:
-        # name, frequency
-        xl = 12, 12
-        lg = 10, 6
-        md = 12, 6
-        sm = 12, 6
     else:
         # name, frequency
         xl = 12, 12
@@ -287,7 +320,12 @@ def color_frequency(fn: str, ln: str) -> list:
                     "width": "30px",
                     "height": "30px",
                     "marginLeft": "10px",
-                    "boxShadow": "0 1px 6px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.5)",
+                    "boxShadow": ",".join(
+                        [
+                            "0 1px 6px rgba(0, 0, 0, 0.1)",
+                            "0 1px 4px rgba(0, 0, 0, 0.5)",
+                        ]
+                    ),
                 }
             )
             for _ in range(row["count"])
@@ -295,11 +333,7 @@ def color_frequency(fn: str, ln: str) -> list:
 
         div = html.Div(
             children=[color_list, *color_frequency],
-            style={
-                "display": "flex",
-                "marginLeft": "10%",
-                # "justifyContent": "center"
-            },
+            style={"display": "flex", "marginLeft": "10%"},
         )
 
         color_frequency_div.append(div)

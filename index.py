@@ -24,12 +24,12 @@ navbar = dbc.NavbarSimple(
             label="Couleurs",
         ),
     ],
-    brand="The Colour Path",
+    brand="The Color Path",
     brand_href="/",
     color="primary",
     dark=True,
 )
-app.title = "The Colour Path"
+app.title = "The Color Path"
 app.layout = html.Div(
     children=[
         dcc.Location(id="url", refresh=False),
@@ -63,7 +63,7 @@ def display_page(pathname: str):
 
 
 if __name__ == "__main__":
-    app.run_server(
+    app.run(
         debug=True,
         dev_tools_hot_reload=True,
     )

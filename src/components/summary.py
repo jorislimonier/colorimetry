@@ -26,65 +26,82 @@ KEYWORDS_STYLE = {
     "marginTop": "20px",
 }
 
-# ------ COLOUR PATH ------
-birthdate_section_title = html.H2(
-    id="birthdate_section_title",
+# ------ COLOR PATH ------
+color_path_section_title = html.H2(
+    id="color_path_section_title",
     style=SECTION_TITLE_STYLE,
 )
-birthdate_color_display = html.Div(
-    id="birthdate_color",
+color_path_section_color_display = html.Div(
+    id="color_path_section_color",
     style=COLOR_STYLE,
 )
-birthdate_title_display = html.H3(
-    id="birthdate_title",
+color_path_section_title_display = html.H3(
+    id="color_path_title",
     style=TITLE_STYLE,
 )
 
-birthdate_keywords_display = html.H4(
-    children=[],
-    id="birthdate_keywords",
+color_path_section_keywords_display = html.H4(
+    id="color_path_section_keywords",
     style=KEYWORDS_STYLE,
 )
 
 # ------ OUTER SELF ------
-fullname_section_title = html.H2(
-    id="fullname_section_title",
+outer_self_section_title = html.H2(
+    id="outer_self_section_title",
     style=SECTION_TITLE_STYLE,
 )
-fullname_color_display = html.Div(
-    id="fullname_color",
+outer_self_section_color_display = html.Div(
+    id="outer_self_section_color",
     style=COLOR_STYLE,
 )
-fullname_title_display = html.H3(
-    id="fullname_title",
+outer_self_section_title_display = html.H3(
+    id="outer_self_title",
     style=TITLE_STYLE,
 )
 
-fullname_keywords_display = html.H4(
+outer_self_section_keywords_display = html.H4(
     children=[],
-    id="fullname_keywords",
+    id="outer_self_section_keywords",
     style=KEYWORDS_STYLE,
 )
 
+
+def color_section(section):
+    section_title = html.H2(
+        id=f"{section}_section_title",
+        style=SECTION_TITLE_STYLE,
+    )
+    section_color_display = html.Div(
+        id=f"{section}_section_color",
+        style=COLOR_STYLE,
+    )
+    section_title_display = html.H3(
+        id=f"{section}_title",
+        style=TITLE_STYLE,
+    )
+
+    section_keywords_display = html.H4(
+        children=[],
+        id=f"{section}_section_keywords",
+        style=KEYWORDS_STYLE,
+    )
+    return dbc.Col(
+        children=[
+            section_title,
+            section_color_display,
+            section_title_display,
+            section_keywords_display,
+        ],
+        md=5,
+    )
+
+
 summary_results = dbc.Row(
     children=[
-        dbc.Col(
-            children=[
-                birthdate_section_title,
-                birthdate_color_display,
-                birthdate_title_display,
-                birthdate_keywords_display,
-            ],
-            width={"size": 5, "offset": 1},
-        ),
-        dbc.Col(
-            children=[
-                fullname_section_title,
-                fullname_color_display,
-                fullname_title_display,
-                fullname_keywords_display,
-            ],
-            width={"size": 5},
-        ),
-    ]
+        color_section("color_path"),
+        color_section("outer_self"),
+        color_section("inner_self"),
+        color_section("latent_self"),
+    ],
+    style={"justifyContent": "space-around"},
 )
