@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import callback, html
 from dash.dependencies import Input, Output, State
+from unidecode import unidecode
 from src import utils
 from src.color_data import ColorData
 from src.components.input_fields import input_fields
@@ -24,38 +25,27 @@ color_glyph_container_firstname = dbc.Col(
     },
 )
 
-color_glyph_container_lastname = dbc.Col(
-    id="color_glyph_container_lastname",
-    style={
-        "display": "flex",
-        "justifyContent": "center",
-        "marginTop": "50px",
-    },
-)
-
 color_frequency_container = dbc.Col(
     id="color_frequency_container",
     style={
+        "justifyContent": "center",
+        "display": "flex",
+        "flex-direction": "column",
         "marginTop": "50px",
     },
 )
 
 second_row_container = html.Div(
     dbc.Row(
-        children=[
-            color_glyph_container_firstname,
-            color_glyph_container_lastname,
-            color_frequency_container,
-        ],
+        children=[color_glyph_container_firstname, color_frequency_container],
         style={
-            "justify ": "center",
+            "justifyContent": "space-around",
             "marginTop": "20px",
         },
     )
 )
 
 layout = [
-    # title,
     input_fields,
     html.Br(),
     summary_results,
@@ -111,9 +101,11 @@ def fullname_color(
     if fn is None or ln is None:
         return dash.no_update
 
+    fn = unidecode(fn)
+    ln = unidecode(ln)
     fn = re.sub(r"[^a-zA-Z]", "", fn)
     ln = re.sub(r"[^a-zA-Z]", "", ln)
-    
+
     digit = utils.digit_from_str(f"{fn}{ln}")
     new_indicator_style = indicator_style
 
@@ -132,18 +124,13 @@ def fullname_color(
 
 @callback(
     Output("color_glyph_container_firstname", "children"),
-    Output("color_glyph_container_lastname", "children"),
     Output("color_glyph_container_firstname", "xl"),
-    Output("color_glyph_container_lastname", "xl"),
     Output("color_frequency_container", "xl"),
     Output("color_glyph_container_firstname", "lg"),
-    Output("color_glyph_container_lastname", "lg"),
     Output("color_frequency_container", "lg"),
     Output("color_glyph_container_firstname", "md"),
-    Output("color_glyph_container_lastname", "md"),
     Output("color_frequency_container", "md"),
     Output("color_glyph_container_firstname", "sm"),
-    Output("color_glyph_container_lastname", "sm"),
     Output("color_frequency_container", "sm"),
     Output("color_frequency_container", "children"),
     Input("firstname_input", "value"),
@@ -151,51 +138,49 @@ def fullname_color(
 )
 def name_results(
     fn: str, ln: str
-) -> tuple[
-    list, list, int, int, int, int, int, int, int, int, int, int, int, int, list
-]:
+) -> tuple[list, int, int, int, int, int, int, int, int, int, int, int, int, list]:
     """Display the color glyph for firstname and lastname,
     as well as the color frequency:"""
 
-    if fn == "" and ln == "":
-        color_glyphs = [], []
+    if fn == "" and ln == "" or fn is None or ln is None:
+        glyph = []
         color_freq = []
-
-    else:
-        fn = re.sub(r"[^a-zA-Z]", " ", fn)
-        ln = re.sub(r"[^a-zA-Z]", " ", ln)
-
-        color_glyphs = color_glyph(fn), color_glyph(ln)
-        color_freq = color_frequency(fn, ln)
-
-    if fn is None or ln is None:
         fullname_length = 0
         firstname_span = 6
+
     else:
-        fullname_length = len(f"{fn} {ln}")
+        fn = unidecode(fn)
+        ln = unidecode(ln)
+
+        fn = re.sub(r"[^a-zA-Z]", "", fn)
+        ln = re.sub(r"[^a-zA-Z]", "", ln)
+
+        glyph = color_glyph(f"{fn}{ln}")
+        color_freq = color_frequency(fn, ln)
+
+        fullname_length = len(f"{fn}{ln}")
         firstname_span = int(12 * len(fn) / fullname_length)
-    lastname_span = 12 - firstname_span
 
     if fullname_length < 25:
-        # firstname, lastname, frequency
+        # name, frequency
         val = 1.4
-        xl = firstname_span // 2, lastname_span // 2, 4
-        lg = firstname_span // 2, lastname_span // 2, 4
-        md = firstname_span // val, lastname_span // val, 10
-        sm = 12, 12, 12
+        xl = 7, 5
+        lg = 7, 5
+        md = firstname_span // val, 10
+        sm = 12, 12
     elif fullname_length < 50:
-        # firstname, lastname
-        xl = firstname_span, lastname_span, 12
-        lg = 10, 6, 6
-        md = 12, 6, 6
-        sm = 12, 12, 6
+        # name, frequency
+        xl = 12, 12
+        lg = 10, 6
+        md = 12, 6
+        sm = 12, 6
     else:
-        # firstname, lastname
-        xl = 12, 12, 12
-        lg = 12, 12, 12
-        md = 12, 12, 12
-        sm = 12, 12, 12
-    return *color_glyphs, *xl, *lg, *md, *sm, color_freq
+        # name, frequency
+        xl = 12, 12
+        lg = 12, 12
+        md = 12, 12
+        sm = 12, 12
+    return glyph, *xl, *lg, *md, *sm, color_freq
 
 
 def color_glyph(name: str) -> list:
