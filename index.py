@@ -29,6 +29,7 @@ navbar = dbc.NavbarSimple(
     color="primary",
     dark=True,
 )
+
 app.title = "The Color Path"
 app.layout = html.Div(
     children=[
@@ -63,7 +64,7 @@ def display_page(pathname: str):
 
 
 if __name__ == "__main__":
-    app.run(
+    app.run_server(
         debug=True,
         dev_tools_hot_reload=True,
     )

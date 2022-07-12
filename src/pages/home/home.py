@@ -56,6 +56,7 @@ layout = [
     Output("color_path_section_title", "children"),
     Output("color_path_title", "children"),
     Output("color_path_section_color", "style"),
+    Output("color_path_section_color_link", "href"),
     Output("color_path_section_keywords", "children"),
     Input("dob_input", "value"),
     Input("mob_input", "value"),
@@ -76,10 +77,12 @@ def color_path_section_color(dob, mob, yob, color_div_style):
         color_path_section_title = "Color path"
         title = f"{cd.color_digit} ─ {cd.title}"
         new_color_div_style["backgroundColor"] = cd.color_code
-        return color_path_section_title, title, new_color_div_style, cd.keywords
+        color_href = f"/couleur/{unidecode(cd.color)}"
+
+        return color_path_section_title, title, new_color_div_style, color_href, cd.keywords
     else:
         new_color_div_style["backgroundColor"] = BG_COLOR
-        return "", "", new_color_div_style, ""
+        return "", "", new_color_div_style, "", ""
 
 
 # ------ OUTER SELF ------
@@ -89,6 +92,7 @@ def color_path_section_color(dob, mob, yob, color_div_style):
             Output(f"{prefix}_self_section_title", "children"),
             Output(f"{prefix}_self_title", "children"),
             Output(f"{prefix}_self_section_color", "style"),
+            Output(f"{prefix}_self_section_color_link", "href"),
             Output(f"{prefix}_self_section_keywords", "children"),
         )
         for prefix in [
@@ -146,7 +150,8 @@ def outer_self_section_color(
     )
 
 
-def section_elements(color_div_style, start_string):
+def section_elements(color_div_style: dict, start_string: str) -> tuple[str, dict, str]:
+    """Return elements for a section with color information"""
     digit = utils.digit_from_str(start_string)
     new_color_div_style = color_div_style
 
@@ -155,11 +160,13 @@ def section_elements(color_div_style, start_string):
     if 1 <= digit <= 9:
         title = f"{cd.color_digit} ─ {cd.title}"
         new_color_div_style["backgroundColor"] = cd.color_code
-        return title, new_color_div_style, cd.keywords
+        color_href = f"/couleur/{unidecode(cd.color)}"
+        return title, new_color_div_style, color_href, cd.keywords
+        
     else:
         print("digit none")
         new_color_div_style["backgroundColor"] = BG_COLOR
-        return "", new_color_div_style, ""
+        return "", new_color_div_style, "", ""
 
 
 @callback(
@@ -182,12 +189,11 @@ def name_results(
     """Display the color glyph for firstname and lastname,
     as well as the color frequency:"""
 
-    if fn is None or ln is None:
-        dash.no_update
-    if fn == "" and ln == "":
+    if fn is None or ln is None or fn == "" and ln == "":
         glyph = []
         color_freq = []
         fullname_length = 0
+        dash.no_update
 
     else:
         fn = unidecode(fn)

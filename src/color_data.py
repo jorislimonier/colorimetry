@@ -28,7 +28,8 @@ class ColorData:
     data = pd.read_excel("data/colors_meaning.xlsx", index_col=0)
     data["color_en"] = data["color"].replace(COLORS_FR_EN)
     data["color_code"] = data["color"].replace(COLORS_DICT)
-    def __init__(self, color_digit) -> None:
+
+    def __init__(self, color_digit: int) -> None:
         self.color_digit = color_digit
 
     @property
