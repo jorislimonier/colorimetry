@@ -6,7 +6,7 @@ from src.constants import BG_COLOR
 
 SECTION_TITLE_STYLE = {
     "textAlign": "center",
-    "textTransform": "uppercase",
+    # "textTransform": "uppercase",
     "marginTop": "20px",
 }
 COLOR_STYLE = {

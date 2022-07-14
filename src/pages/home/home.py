@@ -74,7 +74,7 @@ def color_path_section_color(dob, mob, yob, color_div_style):
     cd = ColorData(digit)
 
     if digit is not None:
-        color_path_section_title = "Color path"
+        color_path_section_title = "COLOR PATH"
         title = f"{cd.color_digit} ─ {cd.title}"
         new_color_div_style["backgroundColor"] = cd.color_code
         color_href = f"/couleur/{unidecode(cd.color)}"
@@ -141,11 +141,11 @@ def outer_self_section_color(
     )
 
     return (
-        "Outer self",
+        "OUTER SELF",
         *outer_self_elements,
-        "Inner self",
+        "INNER SELF : enfant intérieur, intimité, manière de gérer les émotions",
         *inner_self_elements,
-        "Latent self",
+        "LATENT SELF : Potentiel  non reconnu, à exploiter, vu par les autres mais pas encore par toi-même",
         *latent_self_elements,
     )
 
@@ -159,6 +159,7 @@ def section_elements(color_div_style: dict, start_string: str) -> tuple[str, dic
 
     if 1 <= digit <= 9:
         title = f"{cd.color_digit} ─ {cd.title}"
+
         new_color_div_style["backgroundColor"] = cd.color_code
         color_href = f"/couleur/{unidecode(cd.color)}"
         return title, new_color_div_style, color_href, cd.keywords
