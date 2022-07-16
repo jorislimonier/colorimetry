@@ -22,7 +22,7 @@ TITLE_STYLE = {
     "marginTop": "20px",
 }
 KEYWORDS_STYLE = {
-    "textAlign": "center",
+    "textAlign": "justify",
     "marginTop": "20px",
 }
 
@@ -30,6 +30,10 @@ KEYWORDS_STYLE = {
 def color_section(section):
     section_title = html.H2(
         id=f"{section}_section_title",
+        style=SECTION_TITLE_STYLE,
+    )
+    section_description = html.H4(
+        id=f"{section}_section_description",
         style=SECTION_TITLE_STYLE,
     )
     section_color_display = dcc.Link(
@@ -53,6 +57,7 @@ def color_section(section):
     return dbc.Col(
         children=[
             section_title,
+            section_description,
             section_color_display,
             section_title_display,
             section_keywords_display,

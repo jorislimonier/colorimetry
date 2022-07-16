@@ -85,11 +85,12 @@ def color_path_section_color(dob, mob, yob, color_div_style):
         return "", "", new_color_div_style, "", ""
 
 
-# ------ OUTER SELF ------
+# ------ OUTER SELF --- INNER SELF --- LATENT SELF ------
 @callback(
     *[
         (
             Output(f"{prefix}_self_section_title", "children"),
+            Output(f"{prefix}_self_section_description", "children"),
             Output(f"{prefix}_self_title", "children"),
             Output(f"{prefix}_self_section_color", "style"),
             Output(f"{prefix}_self_section_color_link", "href"),
@@ -142,10 +143,13 @@ def outer_self_section_color(
 
     return (
         "OUTER SELF",
+        "", # No extra description
         *outer_self_elements,
-        "INNER SELF : enfant intérieur, intimité, manière de gérer les émotions",
+        "INNER SELF",
+        "(Enfant intérieur, intimité, manière de gérer les émotions)",
         *inner_self_elements,
-        "LATENT SELF : Potentiel  non reconnu, à exploiter, vu par les autres mais pas encore par toi-même",
+        "LATENT SELF",
+        "(Potentiel  non reconnu, à exploiter, vu par les autres mais pas encore par toi-même)",
         *latent_self_elements,
     )
 

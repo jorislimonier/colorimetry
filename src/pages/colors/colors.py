@@ -37,7 +37,7 @@ for color in COLOR_LIST:
         rows.append(
             dbc.Row(
                 children=[archetype_title, archetype_descr],
-                style={"marginTop": "30px"},
+                style={"textAlign": "justify", "marginTop": "30px"},
             )
         )
 
@@ -55,7 +55,7 @@ for color in COLOR_LIST:
                 color_data["description"],
                 width={"size": 10, "offset": 1},
             ),
-            style={"marginTop": "20px"},
+            style={"textAlign": "justify", "marginTop": "20px"},
         ),
     )
 
